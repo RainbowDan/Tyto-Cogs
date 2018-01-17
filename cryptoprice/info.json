@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Tyto",
+    "INSTALL_MSG" : "This may or may not give you errors. It's hack-y and kind of bad code.",
+    "NAME" : "CryptoPrice",
+    "SHORT" : "Crypto price checker",
+    "DESCRIPTION" : "Check the price of cryptocurrencies, on various exchanges.",
+    "TAGS" : ["crypto", "price", "coin"],
+    "REQUIREMENTS" : ["cryptocompy"],
+    "HIDDEN" : false
+}
