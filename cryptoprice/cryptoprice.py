@@ -23,13 +23,17 @@ class CryptoPrice:
 
         #Get dictionary of coin info, then try to get the price (p) and 24hr change (c24h) from the API.
         try:
-            dict = price.get_current_price(coinSearch, returnCurr, e=ex, try_conversion=True, full=True, format='display')
+            print("Trying to get coin from API")
+			dict = price.get_current_price(coinSearch, returnCurr, e=ex, try_conversion=True, full=True, format='display')
+			print("Trying to get price from returned JSON")
             p = dict[coinSearch][returnCurr]['PRICE'].replace(" ", "")
+			print("Trying to get 24hr change")
             c24h = dict[coinSearch][returnCurr]['CHANGEPCT24HOUR']
-            await self.bot.say("The current price of {} is {} ({}%)".format(coin,p,c24h))
+            print("Got everything, saying message")
+			await self.bot.say("The current price of {} is {} ({}%)".format(coin,p,c24h))
         except KeyError as e:
             print("KeyError. Can't find data!", e)
-            await self.bot.say("Something went wrong. Does that coin exist?")
+            await self.bot.say("Something went wrong. Check console log for more information.")
 
 def setup(bot):
     bot.add_cog(CryptoPrice(bot))
