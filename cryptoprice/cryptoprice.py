@@ -1,15 +1,20 @@
 import discord
 from discord.ext import commands
 from cryptocompy import price
+from bs4 import BeautifulSoup
+import aiohttp
+import asyncio
 
 class CryptoPrice:
     """Check price of cryptocurrencies!"""
 
     def __init__(self, bot):
         self.bot = bot
+		self.url = "https://rsihunter.com"
 
     @commands.command(name='price', pass_context=True)
     async def price(self, ctx, coin, returnCurr='USD', ex='all'):
+
         """Checks current price and 24hr percentage change of a coin. Optionally specify the return currency and the exchange (eg GDAX)."""
         coin = coin.upper()
         returnCurr = returnCurr.upper()
@@ -34,6 +39,24 @@ class CryptoPrice:
         except KeyError as e:
             print("KeyError. Can't find data!", e)
             await self.bot.say("Something went wrong. Check console log for more information.")
-
+			
+		return
+	
+	@commands.command(name='rsi', pass_context=True)
+	async def rsi(self, ctx):
+		output = ""
+		async with aiohttp.get(self.url) as response:
+			soupObject = BeautifulSoup(await response.text(), "html.parser")
+		try:
+			currencydetails = soupObject.find_all(class_='currency-item coininfo', limit=5)
+			for i, coin in enumerate(currencydetails):
+				rsi = coin.find(class_='progress').get_text().strip()
+				ticker = coin.find_next('h3').get_text()
+				output += ("#{} {} -- {}".format(i+1, ticker, rsi) + '\n')
+		except:
+			await print("error.")
+		
+		await self.bot.say('```' + output.strip() + '```')
+	
 def setup(bot):
     bot.add_cog(CryptoPrice(bot))
