@@ -7,7 +7,6 @@ try: # check if BeautifulSoup4 is installed
 except:
 	soupAvailable = False
 import aiohttp
-import asyncio
 
 class CryptoPrice:
 	"""Check price of cryptocurrencies!"""
@@ -48,6 +47,7 @@ class CryptoPrice:
 	
 	@commands.command(name='rsi', pass_context=True)
 	async def rsi(self, ctx):
+		"""Grabs top 5 oversold coins from RSIHunter"""
 		output = ""
 		async with aiohttp.get(self.url) as response:
 			soupObject = BeautifulSoup(await response.text(), "html.parser")

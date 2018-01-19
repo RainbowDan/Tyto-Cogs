@@ -5,6 +5,6 @@
     "SHORT" : "Crypto price checker",
     "DESCRIPTION" : "Check the price of cryptocurrencies, on various exchanges.",
     "TAGS" : ["crypto", "price", "coin"],
-    "REQUIREMENTS" : ["cryptocompy", "beautifulsoup4"],
+    "REQUIREMENTS" : ["cryptocompy", "beautifulsoup4", "aiohttp"],
     "HIDDEN" : false
 }
