@@ -1,7 +1,11 @@
 import discord
 from discord.ext import commands
 from cryptocompy import price
-from bs4 import BeautifulSoup
+try: # check if BeautifulSoup4 is installed
+	from bs4 import BeautifulSoup
+	soupAvailable = True
+except:
+	soupAvailable = False
 import aiohttp
 import asyncio
 
@@ -59,4 +63,7 @@ class CryptoPrice:
 		await self.bot.say('```' + output.strip() + '```')
 	
 def setup(bot):
-	bot.add_cog(CryptoPrice(bot))
+	if soupAvailable:
+		bot.add_cog(Mycog(bot))
+	else:
+		raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
