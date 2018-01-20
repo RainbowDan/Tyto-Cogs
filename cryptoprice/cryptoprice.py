@@ -43,7 +43,7 @@ class CryptoPrice:
                 error = data['Message']
                 raise KeyError(error)
         except KeyError as e:
-            await self.bot.say(e)
+            await self.bot.say("``" + e.strip("'") + "``")
             print('KeyError:', e)
 
     @commands.command(name='rsi', pass_context=True)
