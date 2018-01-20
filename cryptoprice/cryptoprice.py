@@ -25,15 +25,16 @@ class CryptoPrice:
         if symbol.isalnum() and comparison_symbol.isalnum():
             data = await self.get_coin_data(symbol, comparison_symbol, exchange)
         else:
-            await self.bot.say("`price only supports single coin lookup,"
-                               "please see `compare for multi-track drifting.")
+            await self.bot.say("\`price only supports single coin lookup, "
+                               "please see \`compare for multi-track drifting.")
+            data = None
         if data:
             price = data[symbol][comparison_symbol][0]
             c24h = data[symbol][comparison_symbol][1]
             await self.bot.say("Current price of {} is {} ({}%)"
                                .format(symbol.upper(), price, c24h))
         else:
-            await self.bot.say("No data!")
+            print('No data.')
 
     @commands.command(name='compare', pass_context=True)
     async def compare(self, ctx, symbol, comparison_symbol='USD', exchange=''):
