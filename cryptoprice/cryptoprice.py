@@ -47,7 +47,7 @@ class CryptoPrice:
                 pctchange = (val[1] + '%')
                 result += ("{}{}\n".format(price.ljust(15),
                                            pctchange.rjust(15)))
-        await self.bot.say("```" + result + "```")
+        await self.bot.say("```\n" + result + "```")
 
     @commands.command(name='rsi', pass_context=True)
     async def rsi(self, ctx):
