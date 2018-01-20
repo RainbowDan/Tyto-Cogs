@@ -32,6 +32,8 @@ class CryptoPrice:
             c24h = data[symbol][comparison_symbol][1]
             await self.bot.say("Current price of {} is {} ({}%)"
                                .format(symbol.upper(), price, c24h))
+        else:
+            await self.bot.say("No data!")
 
     @commands.command(name='compare', pass_context=True)
     async def compare(self, ctx, symbol, comparison_symbol='USD', exchange=''):
@@ -97,6 +99,7 @@ class CryptoPrice:
                         price = values['PRICE']
                         changepct24hour = values['CHANGEPCT24HOUR']
                         result[fsym].update({tsym: [price, changepct24hour]})
+            return data
         except KeyError as e:
             print('KeyError:', e)
             await self.bot.say("KeyError: " + str(e))
