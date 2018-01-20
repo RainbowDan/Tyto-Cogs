@@ -83,8 +83,8 @@ class CryptoPrice:
 
         try:
             page = await aiohttp.get(url)
-            print(page.json())
-            data = dict(page.json())
+            print(page.text())
+            data = await page.json()
             print(data)
             if 'Response' in data:
                 error = data['Message']
