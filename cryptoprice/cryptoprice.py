@@ -110,6 +110,9 @@ class CryptoPrice:
             print('SyntaxError:', e)
             await self.bot.say("SyntaxError: " + str(e))
             return
+        except Exception as e:
+            print(e)
+            
 
 
 def setup(bot):
