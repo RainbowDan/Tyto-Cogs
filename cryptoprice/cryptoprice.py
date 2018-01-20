@@ -23,10 +23,12 @@ class CryptoPrice:
         Optionally specify a return currency and exchange."""
         # Check if these seem like single coins or not
         if symbol.isalnum() and comparison_symbol.isalnum():
-            data = await self.get_coin_data(symbol, comparison_symbol, exchange)
+            data = await self.get_coin_data(
+                symbol, comparison_symbol, exchange)
         else:
             await self.bot.say("\`price only supports single coin lookup, "
-                               "please see \`compare for multi-track drifting.")
+                               "please see \`compare for multi-track drifting."
+                               )
             data = None
         if data:
             price = data[symbol][comparison_symbol][0]
@@ -48,7 +50,7 @@ class CryptoPrice:
         for fsym, v in data.items():
             result += (fsym.center(30, '-') + '\n')
             for tsym, val in dict(v).items():
-                price = val[0].replace('$','USD').replace('£','GBP')                
+                price = val[0].replace('$', 'USD').replace('£', 'GBP')
                 pctchange = (val[1] + '%')
                 result += ("{}{}\n".format(price.ljust(15),
                                            pctchange.rjust(15)))
@@ -105,7 +107,7 @@ class CryptoPrice:
                         price = values['PRICE']
                         changepct24hour = values['CHANGEPCT24HOUR']
                         result[fsym].update({tsym: [price, changepct24hour]})
-            
+
             return result
         except KeyError as e:
             print('KeyError:', e)
@@ -117,7 +119,6 @@ class CryptoPrice:
             return
         except Exception as e:
             print(e)
-            
 
 
 def setup(bot):
