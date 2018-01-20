@@ -23,7 +23,7 @@ class CryptoPrice:
         Optionally specify a return currency and exchange."""
         # Check if these seem like single coins or not
         if symbol.isalnum() and comparison_symbol.isalnum():
-            data = await get_coin_data(symbol, comparison_symbol, exchange)
+            data = await self.get_coin_data(symbol, comparison_symbol, exchange)
         else:
             await self.bot.say("`price only supports single coin lookup,"
                                "please see `compare for multi-track drifting.")
@@ -36,7 +36,7 @@ class CryptoPrice:
     @commands.command(name='compare', pass_context=True)
     async def compare(self, ctx, symbol, comparison_symbol='USD', exchange=''):
         result = ""
-        data = await get_coin_data(symbol, comparison_symbol, exchange)
+        data = await self.get_coin_data(symbol, comparison_symbol, exchange)
 
         for fsym, v in data.items():
             result += (fsym.center(30, '-') + '\n')
