@@ -38,13 +38,17 @@ class CryptoPrice:
 
     @commands.command(name='compare', pass_context=True)
     async def compare(self, ctx, symbol, comparison_symbol='USD', exchange=''):
+        """Multi-coin lookup, slower but prettier than price.
+        Usage: symbol can be a list of coins, seperated by a comma.
+               comparison_symbol can be a list, also.
+               optionally specify an exchange."""
         result = ""
         data = await self.get_coin_data(symbol, comparison_symbol, exchange)
 
         for fsym, v in data.items():
             result += (fsym.center(30, '-') + '\n')
             for tsym, val in dict(v).items():
-                price = val[0]
+                price = val[0].replace('$','USD').replace('£','GBP')                
                 pctchange = (val[1] + '%')
                 result += ("{}{}\n".format(price.ljust(15),
                                            pctchange.rjust(15)))
