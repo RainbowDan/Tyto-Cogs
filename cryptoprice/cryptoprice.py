@@ -33,9 +33,9 @@ class CryptoPrice:
 			print("Trying to get " + coinSearch + " from API")
 			dict = await price.get_current_price(coinSearch, returnCurr, e=ex, try_conversion=True, full=True, format='display')
 			print("Trying to get price from returned JSON")
-			p = await dict[coinSearch][returnCurr]['PRICE'].replace(" ", "")
+			p = dict[coinSearch][returnCurr]['PRICE'].replace(" ", "")
 			print("Trying to get 24hr change")
-			c24h = await dict[coinSearch][returnCurr]['CHANGEPCT24HOUR']
+			c24h = dict[coinSearch][returnCurr]['CHANGEPCT24HOUR']
 			print("Got everything, saying message")
 			await self.bot.say("The current price of {} is {} ({}%)".format(coin,p,c24h))
 		except KeyError as e:
