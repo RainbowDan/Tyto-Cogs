@@ -30,11 +30,14 @@ class CryptoPrice:
             page = await aiohttp.get(url)
             data = await page.json()
             if 'DISPLAY' in data:
-                p = data['DISPLAY'][symbol][comparison_symbol]['PRICE']\
-                    .replace(" ", "")
-                data['DISPLAY'][symbol][comparison_symbol]['CHANGEPCT24HOUR']
-                self.bot.say("The current price of {} is {} ({}%)"
-                             .format(symbol, p, c24h))
+                p = (data['DISPLAY'][symbol][comparison_symbol]['PRICE']
+                     .replace(" ", ""))
+                c24h = (data['DISPLAY']
+                            [symbol]
+                            [comparison_symbol]
+                            ['CHANGEPCT24HOUR'])
+                await self.bot.say("The current price of {} is {} ({}%)"
+                                   .format(symbol, p, c24h))
                 # return p, c24h
             elif 'Response' in data:
                 error = data['Message']
