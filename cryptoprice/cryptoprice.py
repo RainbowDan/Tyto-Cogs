@@ -21,9 +21,11 @@ class CryptoPrice:
     async def price(self, ctx, symbol, comparison_symbol='USD', exchange=''):
         """Checks current price of a coin.
         Optionally specify a return currency and exchange."""
+        symbol = symbol.upper()
+        comparison_symbol = comparison_symbol.upper()
         url = ('https://min-api.cryptocompare.com'
                '/data/pricemultifull?fsyms={}&tsyms={}'
-               .format(symbol.upper(), comparison_symbol.upper()))
+               .format(symbol, comparison_symbol))
         if exchange:
             url += '&e={}'.format(exchange)
         try:
@@ -43,7 +45,8 @@ class CryptoPrice:
                 error = data['Message']
                 raise KeyError(error)
         except KeyError as e:
-            print(e)
+            await self.bot.say("``" + str(e).strip("'") + "``")
+            print('KeyError:', e)
 
     @commands.command(name='rsi', pass_context=True)
     async def rsi(self, ctx):
