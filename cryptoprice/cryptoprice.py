@@ -31,7 +31,7 @@ class CryptoPrice:
 		#Get dictionary of coin info, then try to get the price (p) and 24hr change (c24h) from the API.
 		try:
 			print("Trying to get " + coinSearch + " from API")
-			dict = await price.get_current_price(coinSearch, returnCurr, e=ex, try_conversion=True, full=True, format='display')
+			dict = price.get_current_price(coinSearch, returnCurr, e=ex, try_conversion=True, full=True, format='display')
 			print("Trying to get price from returned JSON")
 			p = dict[coinSearch][returnCurr]['PRICE'].replace(" ", "")
 			print("Trying to get 24hr change")
