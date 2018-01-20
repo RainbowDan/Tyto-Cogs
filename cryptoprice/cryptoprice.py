@@ -83,7 +83,8 @@ class CryptoPrice:
 
         try:
             page = await aiohttp.get(url)
-            data = dict(page.json())
+            print(page)
+            data = dict(page.text())
             print(data)
             if 'Response' in data:
                 error = data['Message']
@@ -99,7 +100,8 @@ class CryptoPrice:
                         price = values['PRICE']
                         changepct24hour = values['CHANGEPCT24HOUR']
                         result[fsym].update({tsym: [price, changepct24hour]})
-            return data
+            
+            return result
         except KeyError as e:
             print('KeyError:', e)
             await self.bot.say("KeyError: " + str(e))
