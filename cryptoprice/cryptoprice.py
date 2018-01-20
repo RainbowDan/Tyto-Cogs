@@ -74,6 +74,7 @@ class CryptoPrice:
                        tsyms.upper()))
         if exchange:
             url += ('&e={}'.format(exchange))
+        print(url)
         fsyms = fsyms.split(',')
         tsyms = tsyms.split(',')
         result = {}
@@ -81,6 +82,7 @@ class CryptoPrice:
         try:
             page = await aiohttp.get(url)
             data = dict(page.json())
+            print(data)
             if 'Response' in data:
                 error = data['Message']
                 raise KeyError(error)
@@ -97,11 +99,11 @@ class CryptoPrice:
                         result[fsym].update({tsym: [price, changepct24hour]})
         except KeyError as e:
             print('KeyError:', e)
-            await self.bot.say("`KeyError: " + str(e))
+            await self.bot.say("KeyError: " + str(e))
             return
         except SyntaxError as e:
             print('SyntaxError:', e)
-            await self.bot.say("`SyntaxError: " + str(e))
+            await self.bot.say("SyntaxError: " + str(e))
             return
 
 
