@@ -21,32 +21,31 @@ class CryptoPrice:
     async def price(self, ctx, symbol, comparison_symbol='USD', exchange=''):
         """Checks current price of a coin.
         Optionally specify a return currency and exchange."""
-        symbol = symbol.upper()
-        comparison_symbol = comparison_symbol.upper()
-        url = ('https://min-api.cryptocompare.com'
-               '/data/pricemultifull?fsyms={}&tsyms={}'
-               .format(symbol, comparison_symbol))
-        if exchange:
-            url += '&e={}'.format(exchange)
-        try:
-            page = await aiohttp.get(url)
-            data = await page.json()
-            if 'DISPLAY' in data:
-                p = (data['DISPLAY'][symbol][comparison_symbol]['PRICE']
-                     .replace(" ", ""))
-                c24h = (data['DISPLAY']
-                            [symbol]
-                            [comparison_symbol]
-                            ['CHANGEPCT24HOUR'])
-                await self.bot.say("The current price of {} is {} ({}%)"
-                                   .format(symbol, p, c24h))
-                # return p, c24h
-            elif 'Response' in data:
-                error = data['Message']
-                raise KeyError(error)
-        except KeyError as e:
-            await self.bot.say("``" + str(e).strip("'") + "``")
-            print('KeyError:', e)
+        # Check if these seem like single coins or not
+        if symbol.isalnum() and comparison_symbol.isalnum():
+            data = await get_coin_data(symbol, comparison_symbol, exchange)
+        else:
+            await self.bot.say("`price only supports single coin lookup,"
+                               "please see `compare for multi-track drifting.")
+        if data:
+            price = data[symbol][comparison_symbol][0]
+            c24h = data[symbol][comparison_symbol][1]
+            await self.bot.say("Current price of {} is {} ({}%)"
+                               .format(symbol.upper(), price, c24h))
+
+    @commands.command(name='compare', pass_context=True)
+    async def compare(self, ctx, symbol, comparison_symbol='USD', exchange=''):
+        result = ""
+        data = await get_coin_data(symbol, comparison_symbol, exchange)
+
+        for fsym, v in data.items():
+            result += (fsym.center(30, '-') + '\n')
+            for tsym, val in dict(v).items():
+                price = val[0]
+                pctchange = (val[1] + '%')
+                result += ("{}{}\n".format(price.ljust(15),
+                                           pctchange.rjust(15)))
+        await self.bot.say("```" + result + "```")
 
     @commands.command(name='rsi', pass_context=True)
     async def rsi(self, ctx):
@@ -65,6 +64,45 @@ class CryptoPrice:
         except:
             await print("error.")
         await self.bot.say('```' + output.strip() + '```')
+
+    async def get_coin_data(self, fsyms, tsyms, exchange):
+        price = ""
+        changepct24hour = ""
+        url = ("https://min-api.cryptocompare.com"
+               "/data/pricemultifull?fsyms={}&tsyms={}"
+               .format(fsyms.upper(),
+                       tsyms.upper()))
+        if exchange:
+            url += ('&e={}'.format(exchange))
+        fsyms = fsyms.split(',')
+        tsyms = tsyms.split(',')
+        result = {}
+
+        try:
+            page = await aiohttp.get(url)
+            data = dict(page.json())
+            if 'Response' in data:
+                error = data['Message']
+                raise KeyError(error)
+            elif 'DISPLAY' in data:
+                data = data['DISPLAY']
+                for fsym in fsyms:
+                    coin_data = data[fsym]
+                    if fsym not in result:
+                        result[fsym] = {}
+                    for tsym in tsyms:
+                        values = coin_data[tsym]
+                        price = values['PRICE']
+                        changepct24hour = values['CHANGEPCT24HOUR']
+                        result[fsym].update({tsym: [price, changepct24hour]})
+        except KeyError as e:
+            print('KeyError:', e)
+            await self.bot.say("`KeyError: " + str(e))
+            return
+        except SyntaxError as e:
+            print('SyntaxError:', e)
+            await self.bot.say("`SyntaxError: " + str(e))
+            return
 
 
 def setup(bot):
