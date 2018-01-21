@@ -21,6 +21,9 @@ class CryptoPrice:
     async def price(self, ctx, symbol, comparison_symbol='USD', exchange=''):
         """Checks current price of a coin.
         Optionally specify a return currency and exchange."""
+        symbol = symbol.upper()
+        comparison_symbol = comparison_symbol.upper()
+        
         # Check if these seem like single coins or not
         if symbol.isalnum() and comparison_symbol.isalnum():
             data = await self.get_coin_data(
@@ -44,6 +47,8 @@ class CryptoPrice:
         Usage: symbol can be a list of coins, seperated by a comma.
                comparison_symbol can be a list, also.
                optionally specify an exchange."""
+        symbol = symbol.upper()
+        comparison_symbol = comparison_symbol.upper()
         result = ""
         data = await self.get_coin_data(symbol, comparison_symbol, exchange)
 
@@ -77,6 +82,8 @@ class CryptoPrice:
     async def get_coin_data(self, fsyms, tsyms, exchange):
         price = ""
         changepct24hour = ""
+        fsyms = fsyms.upper()
+        tsyms = tsyms.upper()
         url = ("https://min-api.cryptocompare.com"
                "/data/pricemultifull?fsyms={}&tsyms={}"
                .format(fsyms.upper(),
