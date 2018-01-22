@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "Tyto",
+    "INSTALL_MSG" : "This may or may not give you errors. It's hack-y and kind of bad code.",
+    "NAME" : "Wolfram",
+    "SHORT" : "Query Wolfram|Alpha",
+    "DESCRIPTION" : "Do math and general queries with Wolfram|Alpha",
+    "TAGS" : ["wolfram", "wolframalpha", "math", "maths"],
+    "REQUIREMENTS" : ["aiohttp", "urllib", "os"],
+    "HIDDEN" : false
+}
